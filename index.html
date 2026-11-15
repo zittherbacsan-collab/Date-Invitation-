@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Very Important Question 💖</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for playful typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Pacifico&display=swap" rel="stylesheet">
+    <!-- Confetti library for the celebration effect -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fce7f3 0%, #fae8ff 50%, #f3e8ff 100%);
+            overflow-x: hidden;
+        }
+        .cursive-title {
+            font-family: 'Pacifico', cursive;
+        }
+        .floating-heart {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        /* Style for the elusive No button */
+        #no-btn {
+            transition: all 0.15s ease-out;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 relative">
+
+    <!-- Background Video Landing Layer -->
+    <div class="fixed inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+        <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-25">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-romantic-sunset-with-silhouettes-of-people-in-the-distance-42353-large.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-br from-pink-100/70 via-purple-100/70 to-rose-100/70 backdrop-blur-[2px]"></div>
+    </div>
+
+    <!-- Background Music Audio Element (Direct HTML5 Audio for reliable playback) -->
+    <audio id="bg-audio" loop preload="auto">
+        <!-- Using a reliable royalty-free romantic background tune stream -->
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=romantic-cute-wedding-112191.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Audio Permission Modal Prompt (Ensures sound works across all modern browsers) -->
+    <div id="audio-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl border border-pink-200 animate-bounce">
+            <div class="text-5xl mb-3">🎵💖</div>
+            <h3 class="cursive-title text-2xl text-pink-600 mb-2">Enable Music?</h3>
+            <p class="text-gray-600 text-sm mb-5">Click below to start the romantic background music and open your invitation!</p>
+            <button onclick="startExperience()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3 rounded-full shadow-lg transition-all cursor-pointer">
+                Let's Go! ✨
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating Audio Toggle Button -->
+    <button id="audio-toggle" onclick="toggleAudio()" class="absolute top-4 right-4 bg-white/85 hover:bg-white text-pink-600 font-bold px-4 py-2 rounded-full shadow-md backdrop-blur-sm border border-pink-200 transition-all z-30 flex items-center gap-2 text-sm cursor-pointer">
+        <span id="audio-icon">🔇</span> <span id="audio-text">Play Music 🎵</span>
+    </button>
+
+    <!-- Floating Background Decor Elements -->
+    <div class="absolute top-10 left-10 text-4xl floating-heart opacity-70 select-none">💖</div>
+    <div class="absolute top-20 right-16 text-3xl floating-heart opacity-70 select-none" style="animation-delay: 1s;">✨</div>
+    <div class="absolute bottom-16 left-20 text-3xl floating-heart opacity-70 select-none" style="animation-delay: 1.5s;">🥺</div>
+    <div class="absolute bottom-10 right-10 text-4xl floating-heart opacity-70 select-none" style="animation-delay: 0.5s;">💘</div>
+
+    <!-- Main Card Container -->
+    <main id="card-container" class="bg-white/80 backdrop-blur-md border border-pink-200 shadow-2xl rounded-3xl p-8 max-w-md w-full text-center relative z-10 transition-all duration-500">
+        
+        <!-- Cute Illustration / Emoji Header -->
+        <div class="mb-6">
+            <div class="w-28 h-28 mx-auto bg-pink-100 rounded-full flex items-center justify-center shadow-inner mb-4 border-2 border-pink-300">
+                <span id="mood-emoji" class="text-6xl select-none transition-transform duration-300">🐱💕</span>
+            </div>
+            <span class="bg-pink-100 text-pink-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Urgent Question</span>
+        </div>
+
+        <!-- Question Header -->
+        <h1 class="cursive-title text-3xl md:text-4xl text-pink-600 mb-3">Will you go on a date with me?</h1>
+        <p id="subtitle-text" class="text-gray-600 text-sm md:text-base mb-8">I promise good food, terrible jokes, and great company! 🥰</p>
+
+        <!-- Interactive Buttons Container -->
+        <div id="button-area" class="flex items-center justify-center gap-4 relative min-h-[90px]">
+            <!-- YES Button -->
+            <button id="yes-btn" onclick="handleYesClick()" class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold text-lg px-8 py-3 rounded-full shadow-lg transform hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer z-20">
+                Yes! 💖
+            </button>
+
+            <!-- NO Button (The elusive escape artist) -->
+            <button id="no-btn" onmouseover="teleportButton()" onclick="teleportButton()" ontouchstart="teleportButton()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold text-lg px-8 py-3 rounded-full shadow-md cursor-pointer select-none">
+                No 🙈
+            </button>
+        </div>
+    </main>
+
+    <!-- Destination & Date Selection Screen (Page 2) -->
+    <div id="destination-screen" class="hidden text-center max-w-md w-full z-20 animate-fade-in">
+        <div class="bg-white/90 backdrop-blur-md border border-pink-200 shadow-2xl rounded-3xl p-8 relative overflow-hidden">
+            <div class="text-6xl mb-3 animate-bounce">✨📅✨</div>
+            <h2 class="cursive-title text-3xl text-pink-600 mb-2">Yay! Best Decision Ever!</h2>
+            <p class="text-gray-600 text-sm mb-6">Now let's pick when and where our date will happen!</p>
+
+            <!-- Date Picker (Restricted to this year) -->
+            <div class="mb-4 text-left">
+                <label class="block text-xs font-bold text-pink-600 uppercase mb-1">Pick a Date (This Year)</label>
+                <input type="date" id="date-picker" class="w-full bg-pink-50 border border-pink-200 rounded-xl px-4 py-2.5 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-pink-400">
+            </div>
+
+            <!-- Destination Area Selection -->
+            <div class="mb-6 text-left">
+                <label class="block text-xs font-bold text-pink-600 uppercase mb-1">Choose the Vibe / Destination (Top 50 PH)</label>
+                <select id="destination-select" class="w-full bg-pink-50 border border-pink-200 rounded-xl px-4 py-2.5 text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-pink-400 max-h-48 overflow-y-auto">
+                    <option value="Boracay Island, Aklan 🏖️">1. Boracay Island, Aklan 🏖️</option>
+                    <option value="El Nido, Palawan 🏝️">2. El Nido, Palawan 🏝️</option>
+                    <option value="Coron, Palawan 🐠">3. Coron, Palawan 🐠</option>
+                    <option value="Chocolate Hills, Bohol 🍫">4. Chocolate Hills, Bohol 🍫</option>
+                    <option value="Siargao Island, Surigao del Norte 🏄">5. Siargao Island, Surigao del Norte 🏄</option>
+                    <option value="Banaue Rice Terraces, Ifugao 🌾">6. Banaue Rice Terraces, Ifugao 🌾</option>
+                    <option value="Vigan Historic Town, Ilocos Sur 🐎">7. Vigan Historic Town, Ilocos Sur 🐎</option>
+                    <option value="Mayon Volcano, Albay 🌋">8. Mayon Volcano, Albay 🌋</option>
+                    <option value="Puerto Princesa Underground River, Palawan 🚣">9. Puerto Princesa Underground River, Palawan 🚣</option>
+                    <option value="Batanes Islands, Batanes ⛰️">10. Batanes Islands, Batanes ⛰️</option>
+                    <option value="Cebu Oslob Whale Sharks, Cebu 🐋">11. Oslob Whale Shark Watching, Cebu 🐋</option>
+                    <option value="Taal Volcano & Lake, Batangas 🌊">12. Taal Volcano & Lake, Batangas 🌊</option>
+                    <option value="Panglao Island, Bohol 🐚">13. Panglao Island, Bohol 🐚</option>
+                    <option value="Hundred Islands National Park, Pangasinan 🏝️">14. Hundred Islands National Park, Pangasinan 🏝️</option>
+                    <option value="Sagada Hanging Coffins, Mountain Province 🌲">15. Sagada Hanging Coffins, Mountain Province 🌲</option>
+                    <option value="Intramuros, Manila 🏛️">16. Intramuros, Manila 🏛️</option>
+                    <option value="Camiguin Island 🌋">17. Camiguin Island ('Bornгід') 🌋</option>
+                    <option value="Davao Eagle Center & Eden Nature Park 🦅">18. Eden Nature Park, Davao 🌳</option>
+                    <option value="Mount Apo, Davao 🏔️">19. Mount Apo, Davao 🏔️</option>
+                    <option value="Subic Bay, Zambales ⛵">20. Subic Bay, Zambales ⛵</option>
+                    <option value="Tagaytay Ridge, Cavite ☕">21. Tagaytay Ridge, Cavite ☕</option>
+                    <option value="Anawangin Cove, Zambales ⛺">22. Anawangin Cove, Zambales ⛺</option>
+                    <option value="Malapascua Island, Cebu 🦈">23. Malapascua Island, Cebu 🦈</option>
+                    <option value="Bantayan Island, Cebu 🌴">24. Bantayan Island, Cebu 🌴</option>
+                    <option value="Siquijor Island 🔮">25. Siquijor Island 🔮</option>
+                    <option value="Apo Island, Negros Oriental 🐢">26. Apo Island, Negros Oriental 🐢</option>
+                    <option value="Lake Sebu, South Cotabato 🌊">27. Lake Sebu, South Cotabato 🌊</option>
+                    <option value="Hinatuan Enchanted River, Surigao del Sur 💧">28. Hinatuan Enchanted River, Surigao del Sur 💧</option>
+                    <option value="Tinuy-an Falls, Surigao del Sur 🌊">29. Tinuy-an Falls, Surigao del Sur 🌊</option>
+                    <option value="Pagsanjan Falls, Laguna 🛶">30. Pagsanjan Falls, Laguna 🛶</option>
+                    <option value="Dinagat Islands 🏝️">31. Dinagat Islands 🏝️</option>
+                    <option value="Guimaras Island (Mango Orchards) 🥭">32. Guimaras Island 🥭</option>
+                    <option value="Mount Pulag, Benguet ☁️">33. Mount Pulag, Benguet (Sea of Clouds) ☁️</option>
+                    <option value="Kawasan Falls, Cebu 💧">34. Kawasan Falls, Cebu 💧</option>
+                    <option value="Malamawi White Beach, Basilan 🏖️">35. Malamawi White Beach, Basilan 🏖️</option>
+                    <option value="Caramoan Islands, Camarines Sur 🏝️">36. Caramoan Islands, Camarines Sur 🏝️</option>
+                    <option value="Calaguas Islands, Camarines Norte 🏖️">37. Calaguas Islands, Camarines Norte 🏖️</option>
+                    <option value="Cagayan de Oro White Water Rafting 🚣">38. Cagayan de Oro River Rafting 🚣</option>
+                    <option value="San Juanico Bridge, Leyte/Samar 🌉">39. San Juanico Bridge, Leyte/Samar 🌉</option>
+                    <option value="Manjuyod Sandbar, Negros Oriental 🏝️">40. Manjuyod Sandbar, Negros Oriental 🏝️</option>
+                    <option value="Paseo del Mar & Santa Cruz Island, Zamboanga 🌸">41. Pink Sand Beach, Zamboanga 🌸</option>
+                    <option value="Dahilayan Adventure Park, Bukidnon 🌲">42. Dahilayan Adventure Park, Bukidnon 🌲</option>
+                    <option value="Bacolod Ruins (The Ruins), Negros Occidental 🏰">43. The Ruins, Bacolod 🏰</option>
+                    <option value="Iloilo Esplanade & Heritage Houses, Iloilo 🌇">44. Iloilo Esplanade, Iloilo 🌇</option>
+                    <option value="Corregidor Island, Cavite/Bataan 🪖">45. Corregidor Island, Cavite/Bataan 🪖</option>
+                    <option value="Paoay Dunes & Church, Ilocos Norte 🏜️">46. Paoay Sand Dunes, Ilocos Norte 🏜️</option>
+                    <option value="Maria Cristina Falls, Iligan City 🌊">47. Maria Cristina Falls, Iligan City 🌊</option>
+                    <option value="Mount Pinatubo Crater Lake, Zambales 🌋">48. Mount Pinatubo Crater Lake, Zambales 🌋</option>
+                    <option value="Capones Island Lighthouse, Zambales 🗼">49. Capones Island Lighthouse, Zambales 🗼</option>
+                    <option value="Baguio Botanical Garden & Mines View, Baguio 🌲">50. Mines View Park, Baguio City 🌲</option>
+                </select>
+            </div>
+
+            <button onclick="confirmDateDetails()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3 rounded-full shadow-lg transition-all cursor-pointer">
+                Lock In The Date! 💌
+            </button>
+        </div>
+    </div>
+
+    <!-- Final Celebration Screen -->
+    <div id="celebration-screen" class="hidden text-center max-w-md w-full z-20 animate-fade-in">
+        <div class="bg-white/90 backdrop-blur-md border border-pink-200 shadow-2xl rounded-3xl p-8 relative overflow-hidden">
+            <div class="text-7xl mb-4 animate-bounce">🎉🥳🍾</div>
+            <h2 class="cursive-title text-4xl text-pink-600 mb-3">All Set!</h2>
+            <p id="final-summary" class="text-gray-700 text-base mb-6">Can't wait to hang out with you! ✨</p>
+            <div class="bg-pink-50 p-4 rounded-2xl border border-pink-200 text-pink-700 font-semibold text-sm mb-6">
+                Status: Date Confirmed! 📅💕
+            </div>
+            <button onclick="resetApp()" class="text-xs text-pink-400 hover:text-pink-600 underline cursor-pointer">
+                Start Over (Just for fun)
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer Credit -->
+    <footer class="absolute bottom-3 text-xs text-pink-400/80 font-medium">
+        Made with extra love & sweetness ✨
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        let dodgeCount = 0;
+        let isPlaying = false;
+        const bgAudio = document.getElementById('bg-audio');
+
+        const funnyMessages = [
+            "Nice try! 😉",
+            "Oops, missed! 🤭",
+            "That button is broken! 🛠️",
+            "Try clicking Yes instead! 💖",
+            "Nope, not an option! 😌",
+            "Stop chasing me! 🏃💨",
+            "Resistance is futile! ✨",
+            "You only have one choice! 🌸"
+        ];
+
+        const emojis = ["🐱💕", "🥺👉👈", "🧸✨", "💌🥰", "🙈💖"];
+
+        function startExperience() {
+            // Hide modal
+            document.getElementById('audio-modal').classList.add('hidden');
+            
+            // Play HTML5 audio
+            bgAudio.play().then(() => {
+                isPlaying = true;
+                document.getElementById('audio-icon').textContent = "🔊";
+                document.getElementById('audio-text').textContent = "Mute Music 🎶";
+            }).catch(error => {
+                console.log("Audio playback error:", error);
+            });
+        }
+
+        function toggleAudio() {
+            const icon = document.getElementById('audio-icon');
+            const text = document.getElementById('audio-text');
+
+            if (isPlaying) {
+                bgAudio.pause();
+                icon.textContent = "🔇";
+                text.textContent = "Play Music 🎵";
+                isPlaying = false;
+            } else {
+                bgAudio.play().then(() => {
+                    icon.textContent = "🔊";
+                    text.textContent = "Mute Music 🎶";
+                    isPlaying = true;
+                }).catch(err => {
+                    console.log("Play failed:", err);
+                });
+            }
+        }
+
+        // Initialize date picker limits to current year only
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date();
+            const year = today.getFullYear();
+            const minDate = today.toISOString().split('T')[0];
+            const maxDate = `${year}-12-31`;
+            
+            const datePicker = document.getElementById('date-picker');
+            datePicker.min = minDate;
+            datePicker.max = maxDate;
+            datePicker.value = minDate;
+        });
+
+        function teleportButton() {
+            const noBtn = document.getElementById('no-btn');
+            const subtitle = document.getElementById('subtitle-text');
+            const emojiSpan = document.getElementById('mood-emoji');
+            
+            // Increment dodge count
+            dodgeCount++;
+
+            // Random position shift within safe viewport boundaries
+            const xOffset = (Math.random() - 0.5) * 240;
+            const yOffset = (Math.random() - 0.5) * 160;
+
+            // Apply smooth translation movement
+            noBtn.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+
+            // Dynamically alter subtitle text to playful prompts
+            const randomMsg = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+            subtitle.textContent = randomMsg;
+
+            // Switch mood emoji every few dodges
+            if (dodgeCount % 2 === 0) {
+                const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+                emojiSpan.textContent = randomEmoji;
+            }
+
+            // Grow the YES button subtly to encourage clicking it
+            const yesBtn = document.getElementById('yes-btn');
+            const currentScale = 1 + Math.min(dodgeCount * 0.05, 0.4);
+            yesBtn.style.transform = `scale(${currentScale})`;
+        }
+
+        function handleYesClick() {
+            // Hide main question card and show destination picker screen
+            document.getElementById('card-container').classList.add('hidden');
+            document.getElementById('destination-screen').classList.remove('hidden');
+
+            // Ensure background music starts playing on successful click if blocked earlier
+            if (!isPlaying) {
+                bgAudio.play().then(() => {
+                    document.getElementById('audio-icon').textContent = "🔊";
+                    document.getElementById('audio-text').textContent = "Mute Music 🎶";
+                    isPlaying = true;
+                }).catch(e => console.log(e));
+            }
+        }
+
+        function confirmDateDetails() {
+            const selectedDate = document.getElementById('date-picker').value;
+            const selectedDestination = document.getElementById('destination-select').value;
+
+            // Update summary text
+            document.getElementById('final-summary').textContent = `Date: ${selectedDate} | Vibe: ${selectedDestination}. It's a date! 🥰`;
+
+            // Hide destination screen and show celebration screen with confetti
+            document.getElementById('destination-screen').classList.add('hidden');
+            document.getElementById('celebration-screen').classList.remove('hidden');
+
+            triggerConfetti();
+        }
+
+        function triggerConfetti() {
+            // Initial celebratory blast
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4d88', '#ff75b5', '#ffd1dc', '#ffffff', '#e0b0ff']
+            });
+
+            // Delayed secondary bursts for continuous joy
+            setTimeout(() => {
+                confetti({
+                    particleCount: 80,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+            }, 300);
+
+            setTimeout(() => {
+                confetti({
+                    particleCount: 80,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+            }, 600);
+        }
+
+        function resetApp() {
+            dodgeCount = 0;
+            document.getElementById('no-btn').style.transform = 'translate(0px, 0px)';
+            document.getElementById('yes-btn').style.transform = 'scale(1)';
+            document.getElementById('subtitle-text').textContent = "I promise good food, terrible jokes, and great company! 🥰";
+            document.getElementById('mood-emoji').textContent = "🐱💕";
+            document.getElementById('celebration-screen').classList.add('hidden');
+            document.getElementById('destination-screen').classList.add('hidden');
+            document.getElementById('card-container').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
